@@ -125,12 +125,6 @@
                 }
             }
         ],
-        "segmentationLegend": {
-            "Tumor": "rgb(188, 57, 80)",
-            "Benign glands": "rgb(104, 190, 97)",
-            "Stroma": "rgb(105, 105, 176)",
-            "Adipose": "rgba(138, 212, 228)"
-        },
         "domainLegend": {
             "Domain 1": "rgb(188, 57, 80)",
             "Domain 2": "rgb(104, 190, 97)",

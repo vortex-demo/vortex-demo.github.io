@@ -49,35 +49,23 @@ controller.control([viewer], sliders);
 sliders.activate([viewer]);
 
 async function checkFolders(slideId) {
-    const segPath = `${DATA_DIR}${slideId}/segmentation`;
-    const domainPath = `${DATA_DIR}${slideId}/spatial_domains`;
-
+    const slideMetadata = METADATA.find(slide => slide.id === slideId);
     const segToggle = document.getElementById('seg-toggle');
     const domainToggle = document.getElementById('domain-toggle');
 
-    // Check segmentation folder
-    try {
-        const resSeg = await fetch(segPath, { method: 'HEAD' });
-        segToggle.parentElement.style.display = resSeg.ok ? 'inline-block' : 'none';
-        if (!resSeg.ok) {
-            segToggle.checked = false;
-            toggleSegmentation(false, slideId);
-        }
-    } catch {
+    // Check segmentation legend in metadata
+    if (slideMetadata && slideMetadata.segmentationLegend) {
+        segToggle.parentElement.style.display = 'inline-block';
+    } else {
         segToggle.checked = false;
         segToggle.parentElement.style.display = 'none';
         toggleSegmentation(false, slideId);
     }
 
-    // Check domain folder
-    try {
-        const resDom = await fetch(domainPath, { method: 'HEAD' });
-        domainToggle.parentElement.style.display = resDom.ok ? 'inline-block' : 'none';
-        if (!resDom.ok) {
-            domainToggle.checked = false;
-            toggleSpatialDomain(false, slideId);
-        }
-    } catch {
+    // Check domain legend in metadata
+    if (slideMetadata && slideMetadata.domainLegend) {
+        domainToggle.parentElement.style.display = 'inline-block';
+    } else {
         domainToggle.checked = false;
         domainToggle.parentElement.style.display = 'none';
         toggleSpatialDomain(false, slideId);
