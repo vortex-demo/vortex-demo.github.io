@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Vortex Demo</title>
+    <!-- Add favicon -->
+    <link rel="icon" href="favicon.png" type="image/png">
+    
+    <!-- Prevent indexing -->
+    <meta name="robots" content="noindex, nofollow">
+    
+    <!-- Imports for THREE.js -->
+    <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+            "three": "https://unpkg.com/three@0.152.2/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.152.2/examples/jsm/"
+            }
+        }
+    </script>
+    <!-- Imports for jQuery and jQuery UI -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css">
+
+    <!-- Import Ubuntu font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu">
+
+    <!-- Custom styles -->
+    <link rel="stylesheet" type="text/css" href="styles/viewer.css">
+    <link rel="stylesheet" type="text/css" href="styles/panel.css">
+    <link rel="stylesheet" type="text/css" href="styles/interactives.css">
+
+    <style>
+        #gene-title,
+        #segmentation-title,
+        #domain-title {
+            background-color: rgba(0,0,0,0.7);
+            padding: 10px;
+            border-radius: 5px;
+            max-width: 50%; /* Adjust width */
+            margin: 0 auto; /* Center horizontally */
+            text-align: center; /* Center text */
+            left: 50%;
+            transform: translateX(-50%);
+            position: absolute;
+            display: none; /* Hide by default */
+        }
+    </style>
+</head>
+
+<body>
+    <div id="metadata-panel" class="show">
+        <!-- VORTEX Logo and Title -->
+        <div class="div-logo-top">
+            <img src="logos/vortex_logo.png" class="logo-vortex">
+            <a href="#" class="logo-vortex-link">VORTEX</a>
+        </div>
+    
+        <!-- Select Sample Heading -->
+        <h2 class="section-heading">Select Sample</h2>
+        <select id="slide-select"></select>
+    
+        <!-- Metadata Information -->
+        <div id="metadata-info"></div>
+    
+        <!-- Select Gene Heading -->
+        <h2 class="section-heading">Select Gene</h2>
+        <div id="gene-list"></div>
+    </div>
+    <div id="panel-toggle-container">
+        <button id="panel-toggle"><<</button>
+    </div>
+
+    <div id="viewer-container">
+        <div id="div-viewer-top">
+            <div id="gene-title" style="color: white; text-align: center; margin-top: 150px; font-size: 1.5em; font-weight: bold;"></div>
+            <div id="div-loading-overlay">
+                <div id="div-loading-animation">
+                </div>
+            </div>
+        </div>
+        <!-- Add this container for segmentation viewer -->
+        <div id="div-viewer-seg">
+            <div id="segmentation-title" style="color: white; text-align: center; margin-top: 150px; font-size: 1.5em; font-weight: bold; display: none;">Morphological Segmentation</div>
+            <div id="domain-title" style="color: white; text-align: center; margin-top: 150px; font-size: 1.5em; font-weight: bold; display: none;">
+                Spatial Domains
+            </div>
+        </div>
+    </div>
+
+    <div id="div-tutorial">
+        <p>Left click and drag to orbit</p>
+        <p>Right click and drag to pan</p>
+        <p>Scroll to zoom</p>
+    </div>
+
+    <!-- Add legend for segmentation classes -->
+    <div id="segmentation-legend" style="display: none;">
+        <!-- Legend items will be dynamically added here -->
+    </div>
+
+    <!-- Add domain legend -->
+    <div id="domain-legend" style="display: none; position: absolute; top:10px; left:50%; transform:translateX(-50%); background-color: rgba(0,0,0,0.7); padding: 10px 30px; border-radius:5px; z-index:1000; gap:20px;">
+        <!-- Legend items will be dynamically added here -->
+    </div>
+
+    <div id="div-colorbar">
+        <div id="colorbar-header">Gene expression level</div>
+        <div id="colorbar-container">
+            <div id="colorbar-label-left">low</div>
+            <div id="colorbar"></div>
+            <div id="colorbar-label-right">high</div>
+        </div>
+    </div>
+    
+
+    <div id="div-interactives">
+        <div id="div-viewer-buttons">
+            <label class="segmentation-toggle">
+                <input type="checkbox" id="seg-toggle" />
+                Segmentation
+            </label>
+            <label class="segmentation-toggle">
+                <input type="checkbox" id="domain-toggle" />
+                Spatial Domain
+            </label>
+            <button class="button-autorotate" id="button-autorotate"><i class="fas fa-sync-alt"></i></button>
+        </div>
+        <div class="div-slider">
+            <button class="button-camera" id="button-camera-y">Y</button>
+            <div class="slider" id="ySlider"></div>
+            <button id="button-autoslicer-y" class="button-autoslicer">Reset</button>
+        </div>
+
+        <div class="div-slider">
+            <button class="button-camera" id="button-camera-x">X</button>
+            <div class="slider" id="xSlider"></div>
+            <button id="button-autoslicer-x" class="button-autoslicer">Reset</button>
+        </div>
+
+        <div class="div-slider">
+            <button class="button-camera" id="button-camera-z">Z</button>
+            <div class="slider" id="zSlider"></div>
+            <button id="button-autoslicer-z" class="button-autoslicer">Reset</button>
+        </div>
+    </div>
+
+    <script type="module" src="main.js"></script>
+    <script>
+        document.getElementById('panel-toggle').addEventListener('click', function () {
+                const panel = document.getElementById('metadata-panel');
+                const viewerContainer = document.getElementById('viewer-container');
+                const toggleContainer = document.getElementById('panel-toggle-container');
+
+                if (panel.classList.contains('show')) {
+                    // Hide panel
+                    panel.classList.remove('show');
+                    this.textContent = '>>';
+                    // Instead of marginLeft=0, shrink the panel but make the container 100% width
+                    viewerContainer.style.width = '100%';
+                    // Move the toggle button to the left edge
+                    toggleContainer.style.left = '0';
+                } else {
+                    // Show panel
+                    panel.classList.add('show');
+                    this.textContent = '<<';
+                    // Squeeze viewer container to fit the 400px panel
+                    viewerContainer.style.width = 'calc(100% - 400px)';
+                    // Move the toggle button to the right edge of the panel
+                    toggleContainer.style.left = '400px';
+                }
+
+                // Resize the three.js canvases
+                window.viewer.resize();
+                window.segViewer.resize();
+            });
+    </script>
+</body>
+
+</html>

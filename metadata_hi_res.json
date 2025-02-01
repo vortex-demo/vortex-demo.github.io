@@ -1,0 +1,281 @@
+[
+    {
+        "id": "P1",
+        "metadata": {
+            "Patient": "P1",
+            "Imaging Modality": "microCT",
+            "Cancer": "Prostate Cancer",
+            "Physical dimensions": "4.3 mm x 4.6 mm x 0.9 mm"
+        },
+        "dimensions": {
+            "x": 663,
+            "z": 576,
+            "y": 111
+        },
+        "available_genes": [
+            {
+                "name": "SPON2",
+                "description": "Prostate cancer biomarker known to be overexpressed in tumor tissue compared to benign prostatic glands.",
+                "statistics": {
+                    "Pearson Correlation Coefficient": 0.736
+                }
+            },
+            {
+                "name": "ACTA2",
+                "description": "ACTA2 encodes the smooth muscle \u03b1-actin and is expressed by stromal smoothed muscle cells. ",
+                "statistics": {
+                    "Pearson Correlation Coefficient": 0.74
+                }
+            },
+            {
+                "name": "FOXA1",
+                "description": "FOXA1 regulates the expression of multiple genes, especially AR in the development and progression of localized prostate cancer. The FOXA1 expression level in primary prostate cancer tissue is high and differs in various subtypes of prostate cancer. High FOXA1 expression usually predicts poor prognosis. ",
+                "statistics": {
+                    "Pearson Correlation Coefficient": 0.826
+                }
+            },
+            {
+                "name": "MSMB",
+                "description": "MSMB is downregulated in prostate cancer, which results in higher expression observed in benign glands compared to cancerous glands. ",
+                "statistics": {
+                    "Pearson Correlation Coefficient": 0.656
+                }
+            },
+            {
+                "name": "EPCAM",
+                "description": "EpCAM is overexpressed in local and metastatic prostate cancer.",
+                "statistics": {
+                    "Pearson Correlation Coefficient": 0.781
+                }
+            },
+            {
+                "name": "COL1A1",
+                "description": "Collagen is the major component of the extracellular matrix (ECM). Collagen type I alpha 1 chain (COL1A1) is the major component of type I collagen, and it is widely distributed throughout the body in the interstitium of parenchymal organs and connective tissues. ",
+                "statistics": {
+                    "Pearson Correlation Coefficient": 0.403
+                }
+            }
+        ],
+        "segmentationLegend": {
+            "Tumor": "rgb(188, 57, 80)",
+            "Benign glands": "rgb(104, 190, 97)",
+            "Stroma": "rgb(105, 105, 176)",
+            "Adipose": "rgba(138, 212, 228)"
+        },
+        "domainLegend": {
+            "Domain 1": "rgb(188, 57, 80)",
+            "Domain 2": "rgb(104, 190, 97)",
+            "Domain 3": "rgb(105, 105, 176)"
+        }
+    },
+    {
+        "id": "P1-largeFOV",
+        "metadata": {
+            "Patient": "P1-largeFOV",
+            "Imaging Modality": "microCT",
+            "Cancer": "Prostate Cancer",
+            "Physical dimensions": "6.6 mm x 8.8 mm x 1.7 mm"
+        },
+        "dimensions": {
+            "x": 663,
+            "z": 504,
+            "y": 208
+        },
+        "available_genes": [
+            {
+                "name": "SPON2",
+                "description": "Prostate cancer biomarker known to be overexpressed in tumor tissue compared to benign prostatic glands.",
+                "statistics": {
+                    "Pearson Correlation Coefficient": 0.736
+                }
+            },
+            {
+                "name": "ACTA2",
+                "description": "ACTA2 encodes the smooth muscle \u03b1-actin and is expressed by stromal smoothed muscle cells. ",
+                "statistics": {
+                    "Pearson Correlation Coefficient": 0.74
+                }
+            },
+            {
+                "name": "FOXA1",
+                "description": "FOXA1 regulates the expression of multiple genes, especially AR in the development and progression of localized prostate cancer. The FOXA1 expression level in primary prostate cancer tissue is high and differs in various subtypes of prostate cancer. High FOXA1 expression usually predicts poor prognosis. ",
+                "statistics": {
+                    "Pearson Correlation Coefficient": 0.826
+                }
+            },
+            {
+                "name": "MSMB",
+                "description": "MSMB is downregulated in prostate cancer, which results in higher expression observed in benign glands compared to cancerous glands. ",
+                "statistics": {
+                    "Pearson Correlation Coefficient": 0.656
+                }
+            },
+            {
+                "name": "EPCAM",
+                "description": "EpCAM is overexpressed in local and metastatic prostate cancer.",
+                "statistics": {
+                    "Pearson Correlation Coefficient": 0.781
+                }
+            },
+            {
+                "name": "COL1A1",
+                "description": "Collagen is the major component of the extracellular matrix (ECM). Collagen type I alpha 1 chain (COL1A1) is the major component of type I collagen, and it is widely distributed throughout the body in the interstitium of parenchymal organs and connective tissues. ",
+                "statistics": {
+                    "Pearson Correlation Coefficient": 0.403
+                }
+            }
+        ],
+        "segmentationLegend": {
+            "Tumor": "rgb(188, 57, 80)",
+            "Benign glands": "rgb(104, 190, 97)",
+            "Stroma": "rgb(105, 105, 176)",
+            "Adipose": "rgba(138, 212, 228)"
+        },
+        "domainLegend": {
+            "Domain 1": "rgb(188, 57, 80)",
+            "Domain 2": "rgb(104, 190, 97)",
+            "Domain 3": "rgb(105, 105, 176)",
+            "Domain 4": "rgba(138, 212, 228)"
+        }
+    },
+    {
+        "id": "P3",
+        "metadata": {
+            "Patient": "P3",
+            "Imaging Modality": "microCT",
+            "Cancer": "Prostate Cancer",
+            "Physical dimensions": "6.5 mm x 6.2 mm x 0.8 mm"
+        },
+        "dimensions": {
+            "x": 564,
+            "z": 663,
+            "y": 100
+        },
+        "available_genes": [
+            {
+                "name": "SPON2",
+                "description": "Prostate cancer biomarker known to be overexpressed in tumor tissue compared to benign prostatic glands.",
+                "statistics": {
+                    "Pearson Correlation Coefficient": 0.749
+                }
+            },
+            {
+                "name": "ACTA2",
+                "description": "ACTA2 encodes the smooth muscle \u03b1-actin and is expressed by stromal smoothed muscle cells. ",
+                "statistics": {
+                    "Pearson Correlation Coefficient": 0.594
+                }
+            },
+            {
+                "name": "FOXA1",
+                "description": "FOXA1 regulates the expression of multiple genes, especially AR in the development and progression of localized prostate cancer. The FOXA1 expression level in primary prostate cancer tissue is high and differs in various subtypes of prostate cancer. High FOXA1 expression usually predicts poor prognosis. ",
+                "statistics": {
+                    "Pearson Correlation Coefficient": 0.667
+                }
+            },
+            {
+                "name": "MSMB",
+                "description": "MSMB is downregulated in prostate cancer, which results in higher expression observed in benign glands compared to cancerous glands. ",
+                "statistics": {
+                    "Pearson Correlation Coefficient": 0.818
+                }
+            },
+            {
+                "name": "EPCAM",
+                "description": "EpCAM is overexpressed in local and metastatic prostate cancer.",
+                "statistics": {
+                    "Pearson Correlation Coefficient": 0.774
+                }
+            },
+            {
+                "name": "COL1A1",
+                "description": "Collagen is the major component of the extracellular matrix (ECM). Collagen type I alpha 1 chain (COL1A1) is the major component of type I collagen, and it is widely distributed throughout the body in the interstitium of parenchymal organs and connective tissues. ",
+                "statistics": {
+                    "Pearson Correlation Coefficient": 0.637
+                }
+            }
+        ],
+        "segmentationLegend": {
+            "Tumor": "rgb(188, 57, 80)",
+            "Benign glands (cystic change)": "rgb(104, 190, 97)",
+            "Benign glands (hyperplasia)": "rgb(221, 212, 36)",
+            "Stroma": "rgb(105, 105, 176)"
+        },
+        "domainLegend": {
+            "Domain 1": "rgb(188, 57, 80)",
+            "Domain 2": "rgb(104, 190, 97)",
+            "Domain 3": "rgb(105, 105, 176)",
+            "Domain 4": "rgb(221, 212, 36)"
+        }
+    },
+    {
+        "id": "P4",
+        "metadata": {
+            "Patient": "P4",
+            "Imaging Modality": "microCT",
+            "Cancer": "Prostate Cancer",
+            "Physical dimensions": "6.0 mm x 5.3 mm x 0.8 mm"
+        },
+        "dimensions": {
+            "x": 547,
+            "z": 663,
+            "y": 100
+        },
+        "available_genes": [
+            {
+                "name": "SPON2",
+                "description": "Prostate cancer biomarker known to be overexpressed in tumor tissue compared to benign prostatic glands.",
+                "statistics": {
+                    "Pearson Correlation Coefficient": 0.701
+                }
+            },
+            {
+                "name": "ACTA2",
+                "description": "ACTA2 encodes the smooth muscle \u03b1-actin and is expressed by stromal smoothed muscle cells. ",
+                "statistics": {
+                    "Pearson Correlation Coefficient": 0.636
+                }
+            },
+            {
+                "name": "FOXA1",
+                "description": "FOXA1 regulates the expression of multiple genes, especially AR in the development and progression of localized prostate cancer. The FOXA1 expression level in primary prostate cancer tissue is high and differs in various subtypes of prostate cancer. High FOXA1 expression usually predicts poor prognosis. ",
+                "statistics": {
+                    "Pearson Correlation Coefficient": 0.521
+                }
+            },
+            {
+                "name": "MSMB",
+                "description": "MSMB is downregulated in prostate cancer, which results in higher expression observed in benign glands compared to cancerous glands. ",
+                "statistics": {
+                    "Pearson Correlation Coefficient": 0.576
+                }
+            },
+            {
+                "name": "EPCAM",
+                "description": "EpCAM is overexpressed in local and metastatic prostate cancer.",
+                "statistics": {
+                    "Pearson Correlation Coefficient": 0.644
+                }
+            },
+            {
+                "name": "COL1A1",
+                "description": "Collagen is the major component of the extracellular matrix (ECM). Collagen type I alpha 1 chain (COL1A1) is the major component of type I collagen, and it is widely distributed throughout the body in the interstitium of parenchymal organs and connective tissues. ",
+                "statistics": {
+                    "Pearson Correlation Coefficient": 0.295
+                }
+            }
+        ],
+        "segmentationLegend": {
+            "Tumor (gleason grade 4)": "rgb(188, 57, 80)",
+            "Tumor (gleason grade 3)": "rgb(139, 46, 99)",
+            "Benign glands (cystic change)": "rgb(221, 212, 36)",
+            "Benign glands (hyperplasia)": "rgb(104, 190, 97)",
+            "Stroma": "rgb(105, 105, 176)"
+        },
+        "domainLegend": {
+            "Domain 1": "rgb(188, 57, 80)",
+            "Domain 2": "rgb(104, 190, 97)",
+            "Domain 3": "rgb(105, 105, 176)"
+        }
+    }
+]
