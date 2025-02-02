@@ -69,9 +69,9 @@
         }
     },
     {
-        "id": "P1-largeFOV",
+        "id": "P1 (large)",
         "metadata": {
-            "Patient": "P1-largeFOV",
+            "Patient": "P1",
             "Imaging Modality": "microCT",
             "Cancer": "Prostate Cancer",
             "Physical dimensions": "6.6 mm x 8.8 mm x 1.7 mm"
