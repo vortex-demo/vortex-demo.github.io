@@ -84,45 +84,27 @@
         "available_genes": [
             {
                 "name": "SPON2",
-                "description": "Prostate cancer biomarker known to be overexpressed in tumor tissue compared to benign prostatic glands.",
-                "statistics": {
-                    "Pearson Correlation Coefficient": 0.736
-                }
+                "description": "Prostate cancer biomarker known to be overexpressed in tumor tissue compared to benign prostatic glands."
             },
             {
                 "name": "ACTA2",
-                "description": "ACTA2 encodes the smooth muscle \u03b1-actin and is expressed by stromal smoothed muscle cells. ",
-                "statistics": {
-                    "Pearson Correlation Coefficient": 0.74
-                }
+                "description": "ACTA2 encodes the smooth muscle \u03b1-actin and is expressed by stromal smoothed muscle cells. "
             },
             {
                 "name": "FOXA1",
-                "description": "FOXA1 regulates the expression of multiple genes, especially AR in the development and progression of localized prostate cancer. The FOXA1 expression level in primary prostate cancer tissue is high and differs in various subtypes of prostate cancer. High FOXA1 expression usually predicts poor prognosis. ",
-                "statistics": {
-                    "Pearson Correlation Coefficient": 0.826
-                }
+                "description": "FOXA1 regulates the expression of multiple genes, especially AR in the development and progression of localized prostate cancer. The FOXA1 expression level in primary prostate cancer tissue is high and differs in various subtypes of prostate cancer. High FOXA1 expression usually predicts poor prognosis. "
             },
             {
                 "name": "MSMB",
-                "description": "MSMB is downregulated in prostate cancer, which results in higher expression observed in benign glands compared to cancerous glands. ",
-                "statistics": {
-                    "Pearson Correlation Coefficient": 0.656
-                }
+                "description": "MSMB is downregulated in prostate cancer, which results in higher expression observed in benign glands compared to cancerous glands. "
             },
             {
                 "name": "EPCAM",
-                "description": "EpCAM is overexpressed in local and metastatic prostate cancer.",
-                "statistics": {
-                    "Pearson Correlation Coefficient": 0.781
-                }
+                "description": "EpCAM is overexpressed in local and metastatic prostate cancer."
             },
             {
                 "name": "COL1A1",
-                "description": "Collagen is the major component of the extracellular matrix (ECM). Collagen type I alpha 1 chain (COL1A1) is the major component of type I collagen, and it is widely distributed throughout the body in the interstitium of parenchymal organs and connective tissues. ",
-                "statistics": {
-                    "Pearson Correlation Coefficient": 0.403
-                }
+                "description": "Collagen is the major component of the extracellular matrix (ECM). Collagen type I alpha 1 chain (COL1A1) is the major component of type I collagen, and it is widely distributed throughout the body in the interstitium of parenchymal organs and connective tissues. "
             }
         ],
         "domainLegend": {
