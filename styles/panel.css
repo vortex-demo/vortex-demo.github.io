@@ -75,10 +75,21 @@
 /* Logo div styles */
 .div-logo-bottom {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    /* Stack logos vertically */
+    width: 80%;
+    /* 80% of the container's width */
+    margin: 0 auto;
+    /* Center the column horizontally */
     align-items: center;
-    width: 100%;
+    /* Center logos horizontally */
     padding: 10px 0;
+    /* Maintain padding */
+}
+
+/* Override logos inside the bottom logo container to occupy 80% width */
+.div-logo-bottom img.logos-small {
+    width: 80%;
 }
 
 /* Small logo image styles */
