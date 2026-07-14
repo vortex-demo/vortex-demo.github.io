@@ -32,6 +32,17 @@ let controller = new ControlPanel('metadata-panel', METADATA);
 controller.update(controller.dropdown.value);
 viewer.load(controller.dropdown.value);
 
+// Match the Segmentation / Spatial Domain checkboxes to the initial sample's available layers.
+// checkFolders otherwise only runs on sample switch, so a first-loaded sample without those layers
+// (e.g. the OTLS volumes, which have no segmentation) would show a stale checkbox. Visibility only.
+(function initLayerToggles() {
+    const m = METADATA.find(slide => slide.id === controller.dropdown.value);
+    const seg = document.getElementById('seg-toggle');
+    const dom = document.getElementById('domain-toggle');
+    seg.parentElement.style.display = (m && m.segmentationLegend) ? 'inline-block' : 'none';
+    dom.parentElement.style.display = (m && m.domainLegend) ? 'inline-block' : 'none';
+})();
+
 // Link control buttons with viewer
 viewer.reset_buttons();
 viewer.autorotate_button();
@@ -108,7 +119,7 @@ function toggleSegmentation(show, slideId) {
         document.getElementById('domain-toggle').checked = false;
         toggleSpatialDomain(false, slideId);
 
-        topDiv.style.width = '50vw';
+        topDiv.style.width = '50%';
         segViewer.container.style.display = 'block';
         legend.style.display = 'flex'; // Show the legend
         segTitleElement.style.display = 'block'; // Show segmentation title
@@ -123,7 +134,7 @@ function toggleSegmentation(show, slideId) {
             updateLegend('segmentation-legend', slideMetadata.segmentationLegend);
         }
     } else {
-        topDiv.style.width = '100vw';
+        topDiv.style.width = '100%';
         segViewer.container.style.display = 'none';
         legend.style.display = 'none'; // Hide the legend
         segTitleElement.style.display = 'none'; // Hide segmentation title
@@ -149,7 +160,7 @@ function toggleSpatialDomain(show, slideId) {
         document.getElementById('seg-toggle').checked = false;
         toggleSegmentation(false, slideId);
 
-        topDiv.style.width = '50vw';
+        topDiv.style.width = '50%';
         segViewer.container.style.display = 'block';
         domainLegend.style.display = 'flex';
         domainTitleElement.style.display = 'block';
@@ -163,7 +174,7 @@ function toggleSpatialDomain(show, slideId) {
             updateLegend('domain-legend', slideMetadata.domainLegend);
         }
     } else {
-        topDiv.style.width = '100vw';
+        topDiv.style.width = '100%';
         segViewer.container.style.display = 'none';
         domainLegend.style.display = 'none';
         domainTitleElement.style.display = 'none';

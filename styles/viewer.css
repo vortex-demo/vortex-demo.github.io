@@ -25,8 +25,15 @@ body {
 /* Viewer container */
 #viewer-container {
     display: flex;
-    flex-grow: 1;
-    height: 100vh;
+    /* The side panel is position:absolute and overlays the left 400px. Anchor the viewer to the
+       space to the panel's right with absolute left/right (left:400px when the panel is open, 0 when
+       hidden) so it never overlaps the panel or overflows. flexbox + margin gave ambiguous widths. */
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 400px;
+    right: 0;
+    transition: left 0.3s ease-in-out;
 }
 
 /* Container for top render */

@@ -255,6 +255,12 @@ export class Viewer {
             this.isSyncing = true;
             this.camera.position.copy(viewer.camera.position);
             this.camera.quaternion.copy(viewer.camera.quaternion);
+            // Also sync the orbit target: panning translates both the camera and the target, so
+            // without this the pan is lost when the other viewer re-derives its camera from its
+            // (stale) target. Sync zoom too so scroll/zoom stays matched.
+            this.controls.target.copy(viewer.controls.target);
+            this.camera.zoom = viewer.camera.zoom;
+            this.camera.updateProjectionMatrix();
             this.controls.update();
             this.isSyncing = false;
         });

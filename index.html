@@ -158,26 +158,25 @@
                 const toggleContainer = document.getElementById('panel-toggle-container');
 
                 if (panel.classList.contains('show')) {
-                    // Hide panel
+                    // Hide panel: viewer expands to the full width
                     panel.classList.remove('show');
                     this.textContent = '>>';
-                    // Instead of marginLeft=0, shrink the panel but make the container 100% width
-                    viewerContainer.style.width = '100%';
+                    viewerContainer.style.left = '0';
                     // Move the toggle button to the left edge
                     toggleContainer.style.left = '0';
                 } else {
-                    // Show panel
+                    // Show panel: viewer occupies the space to the right of the panel (no overlap)
                     panel.classList.add('show');
                     this.textContent = '<<';
-                    // Squeeze viewer container to fit the 400px panel
-                    viewerContainer.style.width = 'calc(100% - 400px)';
+                    viewerContainer.style.left = '400px';
                     // Move the toggle button to the right edge of the panel
                     toggleContainer.style.left = '400px';
                 }
 
-                // Resize the three.js canvases
+                // Resize the three.js canvases now and again once the slide transition settles
                 window.viewer.resize();
                 window.segViewer.resize();
+                setTimeout(function () { window.viewer.resize(); window.segViewer.resize(); }, 320);
             });
     </script>
 </body>
