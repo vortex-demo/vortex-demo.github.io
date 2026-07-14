@@ -34,6 +34,17 @@ export class Viewer {
         this.controls.autoRotate = false;
         this.controls.autoRotateSpeed = -1.0;  // set rotation speed to -2.0 degrees per second
 
+        // --- Slice performance: shared loader + LRU texture cache ---
+        // Slicing re-textures the 6 cube faces. Fetching/decoding a PNG per face on every slider
+        // tick was the bottleneck, so we (a) reuse one loader, (b) cache decoded textures (LRU, so
+        // revisited slices are instant and don't re-upload to the GPU), and (c) only re-fetch faces
+        // whose slice index actually changed -- the rest just get re-cropped.
+        this._loader = new THREE.TextureLoader();
+        this._texCache = new Map();            // url -> THREE.Texture, insertion-ordered for LRU
+        this._texCacheMax = 240;               // cap resident textures to bound GPU memory
+        this._faceUrl = [null, null, null, null, null, null];  // current image url per material face
+        this._sliceGen = 0;                    // guards against stale async loads during fast drags
+
         // Bind the animate and resize methods to this
         this.animate = this.animate.bind(this);
         this.resize = this.resize.bind(this);
@@ -160,14 +171,34 @@ export class Viewer {
         });
     }
 
+    // Fetch a texture, using the LRU cache when possible (marks it most-recently-used).
+    _getTexture(url) {
+        const cached = this._texCache.get(url);
+        if (cached) {
+            this._texCache.delete(url);
+            this._texCache.set(url, cached);   // move to most-recently-used
+            return Promise.resolve(cached);
+        }
+        return new Promise((resolve, reject) => {
+            this._loader.load(url, tex => {
+                this._texCache.set(url, tex);
+                // Evict least-recently-used textures beyond the cap and free their GPU memory,
+                // but never dispose one that is currently shown on a face.
+                while (this._texCache.size > this._texCacheMax) {
+                    const oldestKey = this._texCache.keys().next().value;
+                    const oldTex = this._texCache.get(oldestKey);
+                    this._texCache.delete(oldestKey);
+                    if (oldTex && !this._faceUrl.includes(oldestKey)) oldTex.dispose();
+                }
+                resolve(tex);
+            }, undefined, reject);
+        });
+    }
+
     // Update tissue block
     slice = async (slider_values) => {
-        // Update tissue block
-        let textureLoader = new THREE.TextureLoader();
         let geneFolder = (this.selectedGene === 'Image Only') ? 'images' : this.selectedGene;
         let path_to_data = `${this.root_dir}${this.slide_id}/${geneFolder}`;
-
-        console.log(`Loading data from: ${path_to_data}`);
 
         this.bounds = {
             left: slider_values.x[0],
@@ -187,42 +218,35 @@ export class Viewer {
             bottom: this.bounds.bottom / this.height
         };
 
-        // Update textures
         const faces = ['right', 'left', 'top', 'bottom', 'front', 'back'];
         const axis = ['x', 'x', 'y', 'y', 'z', 'z'];
-        const face_idx = [0, 1, 2, 3, 4, 5];
+        const gen = ++this._sliceGen;   // this call's generation; ignore its loads if superseded
 
-        // Wrap each texture loading operation in a Promise
-        let promises = faces.map((face, i) =>
-            new Promise((resolve, reject) => {
-                const imagePath = `${path_to_data}/${axis[i]}/${this.bounds[face]}.png`;
-                console.log(`Loading image: ${imagePath}`);
-                textureLoader.load(imagePath, loadedTexture => {
-                    // Crop texture using repeat and offset
-                    let { window_horizontal, window_vertical } = calculateWindow(face, this.bounds_normalized);
-                    let { offset_horizontal, offset_vertical } = calculateOffset(face, this.bounds_normalized);
-                    loadedTexture.repeat.set(window_horizontal, window_vertical);
-                    loadedTexture.offset.set(offset_horizontal, offset_vertical);
+        const applyCrop = (tex, face) => {
+            const { window_horizontal, window_vertical } = calculateWindow(face, this.bounds_normalized);
+            const { offset_horizontal, offset_vertical } = calculateOffset(face, this.bounds_normalized);
+            tex.repeat.set(window_horizontal, window_vertical);
+            tex.offset.set(offset_horizontal, offset_vertical);
+            tex.needsUpdate = true;
+        };
 
-                    // Update material with new texture
-                    this.tissue_block.material[face_idx[i]].map = loadedTexture;
-                    this.tissue_block.material[face_idx[i]].needsUpdate = true;
-                    resolve();
-                },
-                    undefined,
-                    err => {
-                        console.error(`Failed to load image: ${imagePath}`, err);
-                        reject(err);
-                    });
-            })
-        );
+        // For each face: if its image is unchanged, only re-crop (no fetch/decode); otherwise fetch
+        // (instant on a cache hit) and apply.
+        let promises = faces.map((face, i) => {
+            const url = `${path_to_data}/${axis[i]}/${this.bounds[face]}.png`;
+            const mat = this.tissue_block.material[i];
 
-        // Dispose old textures
-        this.tissue_block.material.forEach(mat => {
-            if (mat.map) {
-                mat.map.dispose();
-                // mat.map = null;
+            if (this._faceUrl[i] === url && mat.map) {
+                applyCrop(mat.map, face);
+                return Promise.resolve();
             }
+            return this._getTexture(url).then(tex => {
+                if (gen !== this._sliceGen) return;   // a newer slice() has superseded this load
+                applyCrop(tex, face);
+                mat.map = tex;
+                mat.needsUpdate = true;
+                this._faceUrl[i] = url;
+            }).catch(err => console.error(`Failed to load image: ${url}`, err));
         });
 
         // Wait for all textures to load
@@ -230,7 +254,6 @@ export class Viewer {
             await Promise.all(promises);
         } catch (err) {
             console.error('An error occurred while loading textures:', err);
-            // throw err;  // or handle error as appropriate
         }
 
         // Update dimensions
