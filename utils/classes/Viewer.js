@@ -102,6 +102,11 @@ export class Viewer {
         let tissue_block_materials = Array(6).fill().map(() => new THREE.MeshBasicMaterial({ map: texture }));
         let block_geometry = new THREE.BoxGeometry(this.width / this.scale_factor, this.height / this.scale_factor, this.depth / this.scale_factor);
         this.tissue_block = new THREE.Mesh(block_geometry, tissue_block_materials);
+
+        // The block's materials were just recreated with a blank placeholder texture, so forget
+        // which image each face is showing -- otherwise slice()'s "unchanged face" fast path could
+        // keep the blank placeholder (e.g. on a same-slice reload when toggling Spatial Domain).
+        this._faceUrl = [null, null, null, null, null, null];
         this.scene.add(this.tissue_block);
 
         // Ensure selectedGene is set
