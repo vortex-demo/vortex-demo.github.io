@@ -44,6 +44,8 @@ export class Viewer {
         this._texCacheMax = 240;               // cap resident textures to bound GPU memory
         this._faceUrl = [null, null, null, null, null, null];  // current image url per material face
         this._sliceGen = 0;                    // guards against stale async loads during fast drags
+        this._prevFaceIdx = [null, null, null, null, null, null];  // last slice index per face (prefetch direction)
+        this._inflight = new Map();            // url -> in-flight load promise (dedupe concurrent loads)
 
         // Bind the animate and resize methods to this
         this.animate = this.animate.bind(this);
@@ -107,6 +109,7 @@ export class Viewer {
         // which image each face is showing -- otherwise slice()'s "unchanged face" fast path could
         // keep the blank placeholder (e.g. on a same-slice reload when toggling Spatial Domain).
         this._faceUrl = [null, null, null, null, null, null];
+        this._prevFaceIdx = [null, null, null, null, null, null];
         this.scene.add(this.tissue_block);
 
         // Ensure selectedGene is set
@@ -188,7 +191,8 @@ export class Viewer {
             this._texCache.set(url, cached);   // move to most-recently-used
             return Promise.resolve(cached);
         }
-        return new Promise((resolve, reject) => {
+        if (this._inflight.has(url)) return this._inflight.get(url);  // share one load (e.g. prefetch + main)
+        const promise = new Promise((resolve, reject) => {
             this._loader.load(url, tex => {
                 this._texCache.set(url, tex);
                 // Evict least-recently-used textures beyond the cap and free their GPU memory,
@@ -202,6 +206,9 @@ export class Viewer {
                 resolve(tex);
             }, undefined, reject);
         });
+        this._inflight.set(url, promise);
+        promise.then(() => this._inflight.delete(url), () => this._inflight.delete(url));
+        return promise;
     }
 
     // Update tissue block
@@ -276,6 +283,23 @@ export class Viewer {
         this.tissue_block.position.x = ((this.bounds.left + this.bounds.right - this.width) / 2) / (this.scale_factor);
         this.tissue_block.position.z = ((this.bounds.front + this.bounds.back - this.depth) / 2) / (this.scale_factor);
         this.tissue_block.position.y = ((this.height - this.bounds.top - this.bounds.bottom) / 2) / (this.scale_factor);
+
+        // Prefetch the next few slices in the drag direction so continued scrubbing hits the cache
+        // instead of waiting on a ~2 MB network fetch per step. Fire-and-forget; results just warm
+        // the LRU cache. Only prefetches faces that actually moved, in the direction of movement.
+        const axisMax = { x: this.width - 1, y: this.height - 1, z: this.depth - 1 };
+        faces.forEach((face, i) => {
+            const idx = this.bounds[face];
+            const prev = this._prevFaceIdx[i];
+            this._prevFaceIdx[i] = idx;
+            if (prev === null || prev === idx) return;
+            const dir = Math.sign(idx - prev);
+            const maxIdx = axisMax[axis[i]];
+            for (let k = 1; k <= 3; k++) {
+                const j = idx + dir * k;
+                if (j >= 0 && j <= maxIdx) this._getTexture(`${path_to_data}/${axis[i]}/${j}.png`).catch(() => {});
+            }
+        });
     }
 
     // Sync camera controls from another viewer
