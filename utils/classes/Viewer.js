@@ -75,10 +75,14 @@ export class Viewer {
         this.camera.position.z = 2;
         this.controls.reset();
 
-        // Increase default magnification if slide type is OTLS
+        // OTLS volumes are thin slabs; open them at an oblique angle (not straight-down) with a
+        // modest zoom, so the landing view shows the 3D block rather than a flat top-face crop.
         if (this.metadata.find(slide => slide.id === slide_id).metadata['Imaging Modality'] === "Open-top light-sheet microscopy (OTLS)") {
-            this.camera.zoom = 3;
+            this.camera.position.set(2.6, 1.9, 2.6);
+            this.controls.target.set(0, 0, 0);
+            this.camera.zoom = 1.3;
             this.camera.updateProjectionMatrix();
+            this.controls.update();
         }
 
         // Compute max dimension for normalization
